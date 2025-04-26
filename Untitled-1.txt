@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Startrails Astronomical Experience</title>
+  <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: black;
+      color: white;
+      overflow-x: hidden;
+      height: 100vh;
+    }
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-img {
+      height: 60px;
+    }
+    .center-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffdf00;
+      flex: 1;
+      text-align: center;
+    }
+    .hamburger {
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      position: relative;
+      margin-left: 20px;
+      transition: all 0.4s ease;
+    }
+    .hamburger span {
+      position: absolute;
+      height: 4px;
+      width: 100%;
+      background: white;
+      left: 0;
+      transition: all 0.3s ease;
+    }
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 8px; }
+    .hamburger span:nth-child(3) { top: 16px; }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg);
+      top: 8px;
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg);
+      top: 8px;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      padding-top: 80px;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.4s ease;
+      z-index: 999;
+    }
+    .sidebar a {
+      padding: 15px 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background: #ffdf00;
+      color: black;
+    }
+    .sidebar.active {
+      left: 0;
+    }
+    .page-section {
+      padding: 100px 20px;
+      min-height: 100vh;
+      text-align: center;
+      display: none;
+    }
+    h1, h2 {
+      color: #ffdf00;
+      margin-bottom: 20px;
+    }
+    .stars, .meteors {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .stars {
+      background: url('stars.jpg') repeat;
+      animation: moveStars 200s linear infinite;
+    }
+    .meteors {
+      background: url('galxy.gi') repeat;
+      background-size: cover;
+      opacity: 0.4;
+    }
+    @keyframes moveStars {
+      from {background-position: 0 0;}
+      to {background-position: -10000px 5000px;}
+    }
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    .book-button {
+      padding: 15px 30px;
+      background-color: #ffdf00;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      z-index: 1001;
+      transition: transform 0.3s ease;
+    }
+    .book-button:hover {
+      transform: scale(1.1);
+    }
+
+    form input, form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ffdf00;
+      text-align: left;
+    }
+    form {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    #thankYouMessage {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: lightgreen;
+    }
+
+    .image-box-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 50px;
+    }
+    .image-box {
+      width: 48%;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .image-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .content-box {
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 12px;
+      margin-top: 40px;
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #bookingFormContainer {
+      display: none;
+      margin-top: 50px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+<div class="meteors"></div>
+
+<div class="sidebar" id="sidebar">
+  <a href="javascript:void(0)" onclick="showPage('home')">Home</a>
+  <a href="javascript:void(0)" onclick="showPage('astronomy-club')">Astronomy Club</a>
+  <a href="javascript:void(0)" onclick="showPage('products')">Products</a>
+  <a href="javascript:void(0)" onclick="showPage('expeditions')">Expeditions</a>
+  <a href="javascript:void(0)" onclick="showPage('mission')">Our Mission</a>
+  <a href="javascript:void(0)" onclick="showPage('about')">About Us</a>
+</div>
+
+<header>
+  <div class="hamburger" onclick="toggleSidebar(this)">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="center-title"></div>
+  <img src="logo.png" class="logo-img" alt="Logo" />
+</header>
+
+<section id="home" class="page-section" style="display: block;">
+  <h1>Welcome to Startrails Astronomical Experiences</h1>
+  <p>Explore the Universe Like Never Before</p>
+
+  <!-- Combined Content Box -->
+  <div class="content-box">
+    <h3>STARGAZING</h3>
+    <p>At Startrails, we offer more than just a night of stargazing. Our experiences are crafted to provide you with an unforgettable adventure into the cosmos. With expert guides, top-notch equipment, and exclusive locations, we bring the beauty of the universe closer to you.</p>
+    <p>Whether you're a seasoned astronomer or a curious beginner, our range of packages caters to all. Join us for a magical journey through the stars!</p>
+  </div>
+
+  <!-- Centered Book Button -->
+  <div class="button-container">
+    <button class="book-button" onclick="toggleBookingForm()">Book Now</button>
+  </div>
+
+  <!-- Image Boxes -->
+  <div class="image-box-container">
+    <div class="image-box">
+      <img src="one.jpg" alt="Image 1">
+    </div>
+    <div class="image-box">
+      <img src="tow.jpg" alt="Image 2">
+    </div>
+  </div>
+
+  <!-- Booking Form -->
+  <div id="bookingFormContainer">
+    <form id="bookingForm">
+      <label>Name:</label>
+      <input type="text" id="name" required />
+
+      <label>Date:</label>
+      <input type="date" id="date" required />
+
+      <label>Slot Timing:</label>
+      <select id="slot" required>
+        <option value="">Select Slot</option>
+        <option>6:00 PM - 8:00 PM</option>
+        <option>8:00 PM - 10:00 PM</option>
+        <option>10:00 PM - 12:00 AM</option>
+      </select>
+
+      <label>Property Name:</label>
+      <input type="text" id="property" required />
+
+      <label>Contact Number:</label>
+      <input type="tel" id="contact" required pattern="[0-9]{10}"/>
+
+      <button type="submit">Submit</button>
+    </form>
+    <div id="thankYouMessage"></div>
+  </div>
+</section>
+
+<script>
+  function toggleSidebar(element) {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("active");
+    element.classList.toggle("active");
+  }
+
+  function showPage(page) {
+    const sections = document.querySelectorAll('.page-section');
+    sections.forEach(section => section.style.display = 'none');
+    document.getElementById(page).style.display = 'block';
+  }
+
+  function toggleBookingForm() {
+    const form = document.getElementById("bookingFormContainer");
+    form.style.display = form.style.display === "block" ? "none" : "block";
+    if (form.style.display === "block") {
+      form.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  document.getElementById("bookingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    document.getElementById("thankYouMessage").textContent = "Thank you for booking! We’ll contact you shortly.";
+    this.reset();
+  });
+</script>
+
+</body>
+</html>
